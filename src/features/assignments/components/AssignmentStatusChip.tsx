@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, borderRadius } from '../../../theme/tokens';
-import { AssignmentStatus } from '../../../types/domain';
+import { colors, spacing, borderRadius } from '@/theme/tokens';
+import { AssignmentStatus } from '@/types/domain';
 
 interface AssignmentStatusChipProps {
   status: AssignmentStatus;

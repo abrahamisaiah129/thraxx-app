@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, StyleSheet, Image, Alert } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { Button } from '../../../components';
-import { proofRepo } from '../../../services/mock/ProofRepo';
-import { colors, spacing } from '../../../theme/tokens';
+import { Button } from '@/components';
+import { proofRepo } from '@/services/mock/ProofRepo';
+import { colors, spacing } from '@/theme/tokens';
 
 interface ProofCaptureProps {
   assignmentId: string;

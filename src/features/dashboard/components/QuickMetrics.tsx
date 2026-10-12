@@ -1,12 +1,10 @@
+import { fleetManagerData } from '@/data/fleetManagerData';
+import { colors } from '@/theme/tokens';
 import { router } from 'expo-router';
-import type { Icon as PhosphorIcon } from 'phosphor-react-native';
-import { Flag } from 'phosphor-react-native/src/icons/Flag';
-import { ListChecks } from 'phosphor-react-native/src/icons/ListChecks';
-import { Motorcycle } from 'phosphor-react-native/src/icons/Motorcycle';
-import { PauseCircle } from 'phosphor-react-native/src/icons/PauseCircle';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import { dashboardData } from '../../../data/mockData';
-import { colors } from '../../../theme/tokens';
+// Cleaned up the imports to prevent bundling and path resolution issues
+import { Flag, ListChecks, PauseCircle, Plus } from 'phosphor-react-native';
+import { useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const COLORS = {
   success: { fg: '#16a34a', bg: '#f0fdf4' },
@@ -19,171 +17,188 @@ const COLORS = {
   border: '#e5e7eb',
 };
 
-type SideRowProps = {
-  label: string;
-  value: number;
-  icon: PhosphorIcon;
-  tone: { fg: string; bg: string };
-  onPress: () => void;
-  isLast?: boolean;
-};
-
-// One compact row in the right column: small icon, label, value.
-function SideRow({ label, value, icon: Icon, tone, onPress, isLast }: SideRowProps) {
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${label}: ${value}`}
-      style={({ pressed }) => [
-        styles.sideRow,
-        !isLast && styles.sideRowDivider,
-        pressed && styles.pressed,
-      ]}
-    >
-      <View style={[styles.sideIcon]}>
-        <Icon size={16} weight="fill" color={tone.fg} />
-      </View>
-      <Text style={styles.sideLabel} numberOfLines={1}>
-        {label}
-      </Text>
-      <Text style={styles.sideValue}>{value.toLocaleString()}</Text>
-    </Pressable>
-  );
-}
-
 export function QuickMetrics() {
-  const { metrics } = dashboardData;
+  const summary = {
+    activeRidersCount: fleetManagerData.riders.length,
+  };
+  const activeAssignments = fleetManagerData.Assignments.filter(
+    (assignment) => assignment.deliveryStatus === 'in_progress',
+  ).length;
 
-  // Flags is red only when something needs attention.
-  const flagTone = metrics.flaggedEvents > 0 ? COLORS.danger : COLORS.neutral;
+  const idleCalculatedValue = fleetManagerData.Assignments.filter(
+    (assignment) => assignment.deliveryStatus === 'in_progress' && assignment.openFlagCount === 0,
+  ).length;
+  const flaggedCalculatedValue = fleetManagerData.supportTickets.filter(
+    (t: any) => t.status === 'open',
+  ).length;
+
+  const [idle, setIdle] = useState(idleCalculatedValue);
+  const [flagged, setFlagged] = useState(flaggedCalculatedValue);
+
+  const flagTone = flagged > 0 ? COLORS.danger : COLORS.neutral;
+  const sideMetrics = [
+    {
+      label: 'Live Tasks',
+      title: 'liveTasks',
+      value: activeAssignments,
+      icon: ListChecks,
+      tone: COLORS.info,
+    },
+    { label: 'Flags', title: 'flags', value: flagged, icon: Flag, tone: flagTone },
+    { label: 'Idle', title: 'idle', value: idle, icon: PauseCircle, tone: COLORS.warning },
+  ];
 
   return (
-    <View style={styles.card}>
-      {/* Hero: Active Riders is the top priority, so it gets the big number and the tinted panel. */}
-      <Pressable
-        onPress={() => router.push('/riders')}
-        accessibilityRole="button"
-        accessibilityLabel={`Active Riders: ${metrics.activeRiders}`}
-        style={({ pressed }) => [styles.hero, pressed && styles.pressed]}
-      >
-        <View style={styles.heroIcon}>
-          <Motorcycle size={24} weight="fill" color={colors.primary} />
-        </View>
-        <View>
-          <Text style={styles.heroValue}>{metrics.activeRiders.toLocaleString()}</Text>
-          <Text style={styles.heroLabel}>Active Riders</Text>
-        </View>
-      </Pressable>
+    <View style={styles.wrapper}>
+      {/* Card 1: Active Riders (hero) on the left, Add Rider action at the top right */}
+      <View style={styles.card}>
+        <Pressable
+          onPress={() => router.push('/fleet_manager/riders')}
+          accessibilityRole="button"
+          accessibilityLabel={`Active Riders: ${summary.activeRidersCount}`}
+          style={({ pressed }) => [styles.hero, pressed && styles.pressed]}
+        >
+          {/* Bottom: number and label stacked */}
+          <View>
+            <Text style={styles.heroValue}>{summary.activeRidersCount.toLocaleString()}</Text>
+            <Text style={styles.heroLabel}>Active Riders</Text>
+          </View>
+        </Pressable>
 
-      {/* Secondary metrics: smaller, stacked, still easy to read. */}
-      <View style={styles.side}>
-        <SideRow
-          label="Tasks"
-          value={metrics.liveAssignments}
-          icon={ListChecks}
-          tone={COLORS.info}
-          onPress={() => router.push('/assignments')}
-        />
-        <SideRow
-          label="Flags"
-          value={metrics.flaggedEvents}
-          icon={Flag}
-          tone={flagTone}
-          onPress={() => router.push('/reports')}
-        />
-        <SideRow
-          label="Idle"
-          value={metrics.idleRiders}
-          icon={PauseCircle}
-          tone={COLORS.warning}
-          onPress={() => router.push('/riders')}
-          isLast
-        />
+        <View style={styles.actionArea}>
+          <Pressable
+            onPress={() => router.push('/fleet_manager/add-rider')}
+            accessibilityRole="button"
+            accessibilityLabel="Add Rider"
+            hitSlop={8}
+            style={({ pressed }) => [styles.addButton, pressed && styles.addButtonPressed]}
+          >
+            {/* Color updated to #2563EA so it doesn't blend into the white button background */}
+            <Plus size={14} weight="bold" color="#2563EA" />
+            <Text style={styles.addText}>Add Rider</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Card 2: the three secondary metrics side by side */}
+      <View style={styles.sideCard}>
+        {sideMetrics.map(({ label, value, icon: Icon, tone }, i) => (
+          <Pressable
+            key={label}
+            style={[styles.sideItem, i < sideMetrics.length - 1 && styles.sideItemDivider]}
+          >
+            <View style={[styles.sideIcon, { backgroundColor: tone.bg }]}>
+              <Icon size={20} weight="duotone" color={tone.fg} />
+            </View>
+            <Text style={[styles.sideValue, { color: tone.fg }]}>{value.toLocaleString()}</Text>
+            <Text style={styles.sideLabel} numberOfLines={1}>
+              {label}
+            </Text>
+          </Pressable>
+        ))}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  // One card holding everything; overflow hidden lets the hero panel follow the rounded corners.
-  card: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff', // Overall card background
-    borderBottomLeftRadius: 16, // Curve the bottom left corner
-    borderBottomRightRadius: 16, // Curve the bottom right corner
-    borderWidth: 0,
-    width: '100%', // Make it full width
-    overflow: 'hidden',
+  // Holds both cards with an even gap between them.
+  wrapper: {
+    gap: 12,
     marginBottom: 24,
   },
 
-  // Left panel: deeper tint to separate from the right side.
-  hero: {
-    flex: 0.9,
-    padding: 16, // Premium spacing
-    justifyContent: 'space-between',
-    backgroundColor: colors.primaryLight, // Traxx blue tint for left panel
-    minHeight: 140, 
+  // ---------- Card 1 ----------
+  card: {
+    flexDirection: 'row',
+    width: '100%',
+    backgroundColor: '#2563EA',
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    overflow: 'hidden',
   },
-  heroIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
+  hero: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'space-between',
+    minHeight: 140,
   },
   heroValue: {
-    fontSize: 48, // Balanced big number
+    fontSize: 48,
     lineHeight: 52,
     fontWeight: '700',
     letterSpacing: -1,
     fontVariant: ['tabular-nums'],
-    color: COLORS.text,
+    color: '#ffffff',
   },
   heroLabel: {
     marginTop: 4,
     fontSize: 15,
     fontWeight: '500',
-    color: COLORS.muted,
+    color: '#ffffff',
   },
 
-  // Right column: more space so labels do not truncate
-  side: {
-    flex: 1.2,
-    paddingHorizontal: 16, 
-    paddingVertical: 12,
-    backgroundColor: '#ffffff', // White right panel
+  // Right side of card 1: keeps the button pinned to the top right.
+  actionArea: {
+    padding: 16,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
   },
-  sideRow: {
-    flex: 1,
+  addButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 999,
   },
-  sideRowDivider: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(0, 0, 0, 0.05)', 
+  addButtonPressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.97 }],
+  },
+  addText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#2563EA',
+  },
+
+  // ---------- Card 2 ----------
+  sideCard: {
+    flexDirection: 'row',
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.border,
+    overflow: 'hidden',
+  },
+  sideItem: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+    gap: 4,
+  },
+  sideItemDivider: {
+    borderRightWidth: StyleSheet.hairlineWidth,
+    borderRightColor: COLORS.border,
   },
   sideIcon: {
-    width: 24, 
-    height: 24, 
+    width: 32,
+    height: 32,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sideLabel: {
-    flex: 1, // Let label take remaining space
-    fontSize: 15,
-    fontWeight: '500',
-    color: COLORS.muted,
-  },
   sideValue: {
-    fontSize: 20, 
+    fontSize: 20,
     fontWeight: '700',
     fontVariant: ['tabular-nums'],
-    color: COLORS.text, 
-    textAlign: 'right', // Value on the right
+  },
+  sideLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: COLORS.muted,
   },
 
   pressed: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors, spacing } from '../../theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 
 interface ListItemProps {
   title: string;

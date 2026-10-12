@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, borderRadius } from '../../theme/tokens';
+import { colors, spacing, borderRadius } from '@/theme/tokens';
 
 type StatusType = 'onTrip' | 'idle' | 'flagged' | 'offline';
 

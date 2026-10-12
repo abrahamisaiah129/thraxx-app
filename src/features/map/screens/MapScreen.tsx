@@ -5,9 +5,9 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 // Import MapView for rendering the interactive map
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 // Import global styling tokens
-import { colors, spacing } from '../../../theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 // Import ScreenContainer to ensure safe area padding and correct background
-import { ScreenContainer } from '../../../components/layout/ScreenContainer';
+import { ScreenContainer } from '@/components/layout/ScreenContainer';
 
 /**
  * FilterPill Component

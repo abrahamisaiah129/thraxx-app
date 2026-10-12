@@ -1,5 +1,5 @@
-import { ProofRepo } from '../../types/repositories';
-import { ProofOfDelivery } from '../../types/domain';
+import { ProofRepo } from '@/types/repositories';
+import { ProofOfDelivery } from '@/types/domain';
 import { simulateNetwork } from './utils';
 
 export class MockProofRepo implements ProofRepo {

@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 // Import core layout and UI elements from React Native
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 // Import global styling tokens
-import { colors, spacing } from '../../../theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 // Import ScreenContainer to ensure safe area padding and correct background
-import { ScreenContainer } from '../../../components/layout/ScreenContainer';
+import { ScreenContainer } from '@/components/layout/ScreenContainer';
 // Import MapTrifold icon for the placeholder
 import { MapTrifold } from 'phosphor-react-native/src/icons/MapTrifold';
 

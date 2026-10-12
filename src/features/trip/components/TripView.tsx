@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Linking, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps'; // Will be installed by orchestrator
-import { Assignment } from '../../../types/domain';
-import { Button } from '../../../components/ui/Button';
-import { Card } from '../../../components/ui/Card';
-import { colors, spacing } from '../../../theme/tokens';
+import { Assignment } from '@/types/domain';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { colors, spacing } from '@/theme/tokens';
 
 type TripStep = 'navigating_to_pickup' | 'arrived_at_pickup' | 'picked_up' | 'navigating_to_dropoff' | 'arrived_at_dropoff';
 

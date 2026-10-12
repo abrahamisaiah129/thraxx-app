@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import { colors } from '../../theme/tokens';
+import { colors } from '@/theme/tokens';
 
 interface LoaderProps {
   fullScreen?: boolean;

@@ -31,7 +31,7 @@ const TAB_ICONS: Record<string, PhosphorIcon> = {
   notifications: Bell,
 };
 
-import { colors } from '../../theme/tokens';
+import { colors } from '@/theme/tokens';
 
 const COLORS = {
   active: colors.primary,

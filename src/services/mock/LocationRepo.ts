@@ -1,5 +1,5 @@
-import { LocationRepo } from '../../types/repositories';
-import { LocationPoint } from '../../types/domain';
+import { LocationRepo } from '@/types/repositories';
+import { LocationPoint } from '@/types/domain';
 import { simulateNetwork } from './utils';
 
 export class MockLocationRepo implements LocationRepo {

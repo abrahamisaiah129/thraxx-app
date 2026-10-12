@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { colors, spacing } from '../../theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 
 interface Column {
   key: string;

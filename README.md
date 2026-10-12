@@ -10,11 +10,31 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Start the app with Fast Refresh enabled
 
    ```bash
-   npx expo start
+   npm run start:dev
    ```
+
+Expo SDK 57 includes Fast Refresh by default. Save a component or style file and the
+running app should update without a manual reload. Use the platform-specific commands
+when needed:
+
+```bash
+npm run android
+npm run ios
+npm run web
+```
+
+If updates become stale after changing Metro configuration, aliases, or dependencies,
+restart once with a clean cache:
+
+```bash
+npm run start:clear
+```
+
+On a native device or emulator, open the developer menu and ensure **Fast Refresh** is
+enabled. On web, use `npm run web`; browser HMR is provided by Expo's Metro dev server.
 
 In the output, you'll find options to open the app in a
 

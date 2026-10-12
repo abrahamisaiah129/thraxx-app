@@ -1,5 +1,5 @@
-import { AssignmentsRepo } from '../../types/repositories';
-import { Assignment } from '../../types/domain';
+import { AssignmentsRepo } from '@/types/repositories';
+import { Assignment } from '@/types/domain';
 import { simulateNetwork } from './utils';
 
 const MOCK_ASSIGNMENTS: Assignment[] = [

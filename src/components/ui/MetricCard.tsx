@@ -1,5 +1,6 @@
 import type { Icon as PhosphorIcon } from 'phosphor-react-native';
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors } from '@/theme/tokens';
 
 export type MetricTone = 'success' | 'info' | 'danger' | 'warning' | 'neutral';
 

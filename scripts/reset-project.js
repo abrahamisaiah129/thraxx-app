@@ -80,16 +80,16 @@ const moveDirectories = async (userInput) => {
     // Create index.tsx
     const indexPath = path.join(newAppDirPath, "index.tsx");
     await fs.promises.writeFile(indexPath, indexContent);
-    console.log("📄 src/app/index.tsx created.");
+    console.log("📄 app/index.tsx created.");
 
     // Create _layout.tsx
     const layoutPath = path.join(newAppDirPath, "_layout.tsx");
     await fs.promises.writeFile(layoutPath, layoutContent);
-    console.log("📄 src/app/_layout.tsx created.");
+    console.log("📄 app/_layout.tsx created.");
 
     console.log("\n✅ Project reset complete. Next steps:");
     console.log(
-      `1. Run \`npx expo start\` to start a development server.\n2. Edit src/app/index.tsx to edit the main screen.\n3. Put all your application code in /src, only screens and layout files should be in /src/app.${
+      `1. Run \`npx expo start\` to start a development server.\n2. Edit app/index.tsx to edit the root screen.\n3. Put route files in /app and application code in /src.${
         userInput === "y"
           ? `\n4. Delete the /${exampleDir} directory when you're done referencing it.`
           : ""

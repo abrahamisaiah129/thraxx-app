@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { Assignment } from '../../../types/domain';
+import { Assignment } from '@/types/domain';
 import { AssignmentStatusChip } from './AssignmentStatusChip';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { colors, spacing } from '../../../theme/tokens';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { colors, spacing } from '@/theme/tokens';
 
 interface AssignmentDetailProps {
   assignment: Assignment;

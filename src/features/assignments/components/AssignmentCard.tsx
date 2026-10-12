@@ -1,78 +1,70 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Card } from '../../../components/ui/Card';
-import { Assignment } from '../../../types/domain';
+import { Card } from '@/components/ui/Card';
+import { colors, spacing } from '@/theme/tokens';
+import { Link } from 'expo-router';
+import { memo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { AssignmentStatusChip } from './AssignmentStatusChip';
-import { colors, spacing } from '../../../theme/tokens';
 
-interface AssignmentCardProps {
-  assignment: Assignment;
-  onPress: (id: string) => void;
-}
-
-export const AssignmentCard = ({ assignment, onPress }: AssignmentCardProps) => {
-  return (
-    <TouchableOpacity onPress={() => onPress(assignment.id)} activeOpacity={0.7} style={styles.container}>
-      <Card>
-        <View style={styles.header}>
-          <Text style={styles.passengerName}>{assignment.passengerName}</Text>
-          <AssignmentStatusChip status={assignment.status} />
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.locationLabel}>Pickup:</Text>
-          <Text style={styles.locationText}>{assignment.pickupLocation}</Text>
-        </View>
-        <View style={styles.details}>
-          <Text style={styles.locationLabel}>Dropoff:</Text>
-          <Text style={styles.locationText}>{assignment.dropoffLocation}</Text>
-        </View>
-        <View style={styles.footer}>
-          <Text style={styles.timeText}>
-            {new Date(assignment.scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </Text>
-        </View>
-      </Card>
-    </TouchableOpacity>
-  );
+type Props = {
+  assignment: {
+    assignmentId: string;
+    waybillTrackingNumber: string;
+    customerName: string;
+    pickupAddress: string;
+    deliveryAddress: string;
+    deliveryStatus: string;
+    openFlagCount: number;
+  };
 };
 
+const place = (address: string) => address.split(',')[0];
+
+export const AssignmentCard = memo(function AssignmentCard({ assignment: a }: Props) {
+  return (
+    <Link
+      href={{
+        pathname: '/fleet_manager/assignments',
+        params: { id: a.assignmentId },
+      }}
+      asChild
+    >
+      <Pressable
+        style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+        accessibilityRole="link"
+        accessibilityLabel={`${a.waybillTrackingNumber}, ${a.customerName}, ${a.deliveryStatus}`}
+      >
+        <Card>
+          <View style={styles.row}>
+            <View style={styles.titleWrap}>
+              <Text style={styles.waybill} numberOfLines={1}>
+                {a.waybillTrackingNumber}
+              </Text>
+              {a.openFlagCount > 0 && <Text style={styles.flag}>⚑ {a.openFlagCount}</Text>}
+            </View>
+            <AssignmentStatusChip
+              status={a.deliveryStatus as Parameters<typeof AssignmentStatusChip>[0]['status']}
+            />
+          </View>
+
+          <Text style={styles.customer} numberOfLines={1}>
+            {a.customerName}
+          </Text>
+          <Text style={styles.route} numberOfLines={1}>
+            {place(a.pickupAddress)} → {place(a.deliveryAddress)}
+          </Text>
+        </Card>
+      </Pressable>
+    </Link>
+  );
+});
+
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: spacing.md,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: spacing.md,
-  },
-  passengerName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.text,
-  },
-  details: {
-    marginBottom: spacing.sm,
-  },
-  locationLabel: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    marginBottom: 2,
-  },
-  locationText: {
-    fontSize: 14,
-    color: colors.text,
-  },
-  footer: {
-    marginTop: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: spacing.sm,
-    alignItems: 'flex-end',
-  },
-  timeText: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    fontWeight: '500',
-  },
+  container: { marginBottom: spacing.sm },
+  pressed: { opacity: 0.7 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  titleWrap: { flexDirection: 'row', alignItems: 'center', flexShrink: 1 },
+  waybill: { fontSize: 14, fontWeight: '600', color: colors.text },
+  flag: { fontSize: 12, fontWeight: '600', color: colors.danger, marginLeft: spacing.sm },
+  customer: { fontSize: 13, color: colors.text, marginTop: 2 },
+  route: { fontSize: 12, color: colors.textSecondary, marginTop: 2 },
 });

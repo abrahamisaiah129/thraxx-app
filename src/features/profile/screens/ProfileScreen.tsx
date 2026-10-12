@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { useProfileStore } from '../store/useProfileStore';
+import { useProfileStore } from '@/features/profile/store/useProfileStore';
 
 export const ProfileScreen = () => {
   const { profile, shiftHistory, isLoading, error, fetchProfileData } = useProfileStore();

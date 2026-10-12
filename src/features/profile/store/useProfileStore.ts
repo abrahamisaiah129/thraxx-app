@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { DriverProfile, ShiftHistoryItem } from '../../../types/domain';
-import { profileRepo } from '../../../services/mock';
+import { DriverProfile, ShiftHistoryItem } from '@/types/domain';
+import { profileRepo } from '@/services/mock';
 
 interface ProfileStore {
   profile: DriverProfile | null;

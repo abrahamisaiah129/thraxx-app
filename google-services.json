@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "320907838605",
+    "project_id": "traxx-test-authentication",
+    "storage_bucket": "traxx-test-authentication.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320907838605:android:5ee81da755d5ffd9eacec4",
+        "android_client_info": {
+          "package_name": "com.traxx.traxxTest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320907838605-neqe8h33slmev2q0bg2bi5froull516e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP2frpyuv3uVR7DlO6vxMBQThj0rybZ4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320907838605-neqe8h33slmev2q0bg2bi5froull516e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { colors } from '../../../theme/tokens';
+import { colors } from '@/theme/tokens';
 import { Copy } from 'phosphor-react-native/src/icons/Copy';
 import { Link } from 'phosphor-react-native/src/icons/Link';
 import { CheckCircle } from 'phosphor-react-native/src/icons/CheckCircle';

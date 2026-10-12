@@ -1,5 +1,5 @@
-import { ProfileRepo } from '../../types/repositories';
-import { DriverProfile, ShiftHistoryItem } from '../../types/domain';
+import { ProfileRepo } from '@/types/repositories';
+import { DriverProfile, ShiftHistoryItem } from '@/types/domain';
 
 const mockProfile: DriverProfile = {
   id: 'driver_123',

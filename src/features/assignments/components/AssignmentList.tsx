@@ -1,9 +1,9 @@
 import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { Assignment } from '../../../types/domain';
+import { Assignment } from '@/types/domain';
 import { AssignmentCard } from './AssignmentCard';
-import { EmptyState } from '../../../components/feedback/EmptyState';
-import { spacing } from '../../../theme/tokens';
+import { EmptyState } from '@/components/feedback/EmptyState';
+import { spacing } from '@/theme/tokens';
 
 interface AssignmentListProps {
   assignments: Assignment[];

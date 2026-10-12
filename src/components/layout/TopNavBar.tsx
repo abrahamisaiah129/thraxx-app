@@ -2,27 +2,35 @@ import React from 'react';
 import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
 // We use useSafeAreaInsets so the navbar respects the phone's notch/status bar dynamically
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, spacing } from '../../theme/tokens';
-import { UserCircle } from 'phosphor-react-native/src/icons/UserCircle';
-import { Bell } from 'phosphor-react-native/src/icons/Bell';
+import { colors } from '@/theme/tokens';
+// Updated imports to use clean main entry points to match QuickMetrics
+import { Bell, UserCircle } from 'phosphor-react-native';
+import { fleetManagerData, MOCK_NOW_MS } from '@/data/fleetManagerData';
 
 /**
  * TopNavBar Component
  */
 export function TopNavBar() {
+  const { Company } = fleetManagerData;
   const insets = useSafeAreaInsets();
 
-  // Greeting logic based on time
-  const hour = new Date().getHours();
+  // Greeting logic dynamically synced using the historical timestamp anchor from mock data
+  const mockNow = new Date(MOCK_NOW_MS);
+  const hour = mockNow.getHours();
+  
   let greeting = 'Good evening';
   if (hour < 12) greeting = 'Good morning';
   else if (hour < 17) greeting = 'Good afternoon';
   
-  const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' });
+  const dateStr = mockNow.toLocaleDateString('en-US', { 
+    weekday: 'short', 
+    month: 'long', 
+    day: 'numeric' 
+  });
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, 12) }]}>
-      {/* Left side: Logo & Context */}
+      {/* Left side: Logo, Context & Company Legal Name */}
       <View style={styles.leftContainer}>
         <Image 
           source={require('../../../assets/images/logo.jpg')} 
@@ -30,20 +38,26 @@ export function TopNavBar() {
           resizeMode="cover"
         />
         <View>
-          <Text style={styles.greeting}>{greeting}</Text>
+          {/* Displays dynamic greeting alongside the extracted legal name from data */}
+          <Text style={styles.greeting}>{`${greeting}, ${Company.legalName}`}</Text>
           <Text style={styles.dateText}>{dateStr}</Text>
         </View>
       </View>
 
       {/* Right side: Actions & Profile */}
       <View style={styles.actionsContainer}>
-        <Pressable style={styles.iconButton}>
+        <Pressable style={styles.iconButton} accessibilityRole="button" accessibilityLabel="Notifications">
           <Bell size={24} color={colors.text} />
           {/* Unread badge indicator */}
           <View style={styles.badge} />
         </Pressable>
 
-        <Pressable style={styles.profileContainer} onPress={() => console.log('Open profile menu')}>
+        <Pressable 
+          style={styles.profileContainer} 
+          onPress={() => console.log('Open profile menu')}
+          accessibilityRole="button"
+          accessibilityLabel="Profile Menu"
+        >
           <UserCircle size={32} color={colors.textSecondary} weight="fill" />
         </Pressable>
       </View>
@@ -103,6 +117,6 @@ const styles = StyleSheet.create({
     borderColor: '#ffffff',
   },
   profileContainer: {
-    // No extra padding needed
+    // Ready for specific tap dimensions if needed
   },
 });

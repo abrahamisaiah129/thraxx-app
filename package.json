@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.21",
+    "@react-native-firebase/app": "^26.4.0",
+    "@react-native-firebase/firestore": "^26.4.0",
     "@tanstack/react-query": "^5.104.1",
     "expo": "~57.0.26",
     "expo-battery": "~57.0.3",
@@ -22,6 +24,7 @@
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
     "expo-web-browser": "~57.0.3",
+    "libphonenumber-js": "^1.13.15",
     "phosphor-react-native": "^3.0.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -46,10 +49,14 @@
   },
   "scripts": {
     "start": "expo start",
+    "start:dev": "expo start --lan",
+    "start:clear": "expo start --lan --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
+    "android:clear": "expo start --android --clear",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "web:clear": "expo start --web --clear",
     "lint": "expo lint"
   },
   "private": true

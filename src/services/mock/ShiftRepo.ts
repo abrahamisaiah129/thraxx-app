@@ -1,5 +1,5 @@
-import { ShiftRepo } from '../../types/repositories';
-import { Shift, ShiftStatus } from '../../types/domain';
+import { ShiftRepo } from '@/types/repositories';
+import { Shift, ShiftStatus } from '@/types/domain';
 import { simulateNetwork } from './utils';
 
 let currentShift: Shift | null = null;

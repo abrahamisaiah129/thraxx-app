@@ -1,5 +1,5 @@
-import { AuthRepo } from '../../types/repositories';
-import { User } from '../../types/domain';
+import { AuthRepo } from '@/types/repositories';
+import { User } from '@/types/domain';
 import { simulateNetwork } from './utils';
 
 const MOCK_USER: User = {

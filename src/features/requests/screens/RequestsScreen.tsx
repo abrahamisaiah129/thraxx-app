@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 // Import UI components
 import { View, Text, StyleSheet, FlatList, TextInput } from 'react-native';
 // Import theme
-import { colors, spacing } from '../../../theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 // Import ScreenContainer
-import { ScreenContainer } from '../../../components/layout/ScreenContainer';
+import { ScreenContainer } from '@/components/layout/ScreenContainer';
 
 /**
  * RequestItem Component

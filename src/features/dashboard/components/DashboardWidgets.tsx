@@ -1,26 +1,24 @@
-import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { colors, spacing } from '../../../theme/tokens';
-import { dashboardData } from '../../../data/mockData';
 import { CaretRight } from 'phosphor-react-native/src/icons/CaretRight';
 import { WarningCircle } from 'phosphor-react-native/src/icons/WarningCircle';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { fleetManagerData } from '@/data/fleetManagerData';
+import { colors } from '@/theme/tokens';
 
 export function DashboardWidgets() {
-  const { todayAssignmentsOverview, recentAlerts } = dashboardData;
-  const top3Assignments = todayAssignmentsOverview.slice(0, 3);
-  
-  // Only show alerts if there are flagged events
-  const hasAlerts = dashboardData.metrics.flaggedEvents > 0;
+  const assignments = fleetManagerData.Assignments;
+  const top3Assignments = assignments.slice(0, 3);
+
+  const flaggedEventsCount = fleetManagerData.supportTickets.filter((t: any) => t.status === 'open').length;
+  const hasAlerts = flaggedEventsCount > 0;
 
   return (
     <View style={styles.container}>
-      
       {/* 1. Recent Alerts Strip (Only shows if flagged > 0) */}
       {hasAlerts && (
         <View style={styles.alertStrip}>
           <WarningCircle size={20} color="#dc2626" weight="fill" />
           <Text style={styles.alertText}>
-            {dashboardData.metrics.flaggedEvents} Actionable Alerts: Route deviations detected.
+            {flaggedEventsCount} Actionable Alerts: Route deviations detected.
           </Text>
           <Pressable>
             <Text style={styles.alertLink}>View</Text>
@@ -53,23 +51,42 @@ export function DashboardWidgets() {
         </View>
 
         <View style={styles.assignmentList}>
-          {top3Assignments.map((task, index) => (
-            <View key={task.id} style={[styles.taskRow, index !== top3Assignments.length - 1 && styles.taskRowDivider]}>
+          {top3Assignments.map((task: any, index: number) => (
+            <View
+              key={index}
+              style={[
+                styles.taskRow,
+                index !== top3Assignments.length - 1 && styles.taskRowDivider,
+              ]}
+            >
               <View style={styles.taskInfo}>
-                <Text style={styles.taskRider}>{task.rider}</Text>
-                <Text style={styles.taskDesc}>{task.task}</Text>
+                <Text style={styles.taskRider}>{task.assignedRiderId}</Text>
+                <Text style={styles.taskDesc}>
+                  {task.pickupAddress} to {task.deliveryAddress}
+                </Text>
               </View>
               <View style={styles.taskMeta}>
-                <Text style={styles.taskTime}>{task.time}</Text>
-                <Text style={[styles.taskStatus, task.status === 'In Transit' ? styles.statusActive : styles.statusPending]}>
-                  {task.status}
+                <Text style={styles.taskTime}>
+                  {new Date(task.createdAtTimestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </Text>
+                <Text
+                  style={[
+                    styles.taskStatus,
+                    task.deliveryStatus === 'in_progress'
+                      ? styles.statusActive
+                      : styles.statusPending,
+                  ]}
+                >
+                  {task.deliveryStatus === 'in_progress' ? 'In Transit' : task.deliveryStatus}
                 </Text>
               </View>
             </View>
           ))}
         </View>
       </View>
-
     </View>
   );
 }
@@ -79,7 +96,7 @@ const styles = StyleSheet.create({
     gap: 24,
     paddingBottom: 40,
   },
-  
+
   // Alerts
   alertStrip: {
     flexDirection: 'row',
@@ -211,5 +228,5 @@ const styles = StyleSheet.create({
   },
   statusPending: {
     color: '#d97706',
-  }
+  },
 });

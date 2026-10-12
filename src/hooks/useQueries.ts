@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useShiftStore, ShiftState } from '../store/useShiftStore';
-import { useActiveTripStore } from '../store/useActiveTripStore';
-import { Assignment } from '../types/domain';
+import { useShiftStore, ShiftState } from '@/store/useShiftStore';
+import { useActiveTripStore } from '@/store/useActiveTripStore';
+import { Assignment } from '@/types/domain';
 
 // Mock API functions
 const fetchCurrentShift = async (): Promise<ShiftState> => {

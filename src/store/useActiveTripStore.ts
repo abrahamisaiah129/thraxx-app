@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Assignment } from '../types/domain';
+import { Assignment } from '@/types/domain';
 
 interface ActiveTripStore {
   activeTrip: Assignment | null;

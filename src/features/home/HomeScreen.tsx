@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { ScreenContainer, Button, Card, StatusChip } from '../../components';
-import { useShiftStore, selectShiftState, selectIsOffShift, selectIsOnShift, selectIsTripActive } from '../../store/useShiftStore';
-import { useActiveTripStore } from '../../store/useActiveTripStore';
-import { useShiftQueries } from '../../hooks/useQueries';
-import { authRepo } from '../../services/mock';
+import { ScreenContainer, Button, Card, StatusChip } from '@/components';
+import { useShiftStore, selectShiftState, selectIsOffShift, selectIsOnShift, selectIsTripActive } from '@/store/useShiftStore';
+import { useActiveTripStore } from '@/store/useActiveTripStore';
+import { useShiftQueries } from '@/hooks/useQueries';
+import { authRepo } from '@/services/mock';
 
 export function HomeScreen() {
   const router = useRouter();
@@ -57,7 +57,7 @@ export function HomeScreen() {
           <Text>Pickup: {activeTrip.pickupLocation}</Text>
           <Text>Dropoff: {activeTrip.dropoffLocation}</Text>
           <View style={{ marginTop: 10 }}>
-            <Button title="View Trip" onPress={() => router.push('/(main)/trip' as any)} variant="primary" />
+            <Button title="View Trip" onPress={() => router.push('/fleet_manager/trip' as any)} variant="primary" />
           </View>
         </Card>
       )}
@@ -66,7 +66,7 @@ export function HomeScreen() {
         <Card>
           <Text style={styles.bannerTitle}>Waiting for trips...</Text>
           <View style={{ marginTop: 10 }}>
-            <Button title="Simulate Trip" onPress={() => router.push('/(main)/trip' as any)} variant="primary" />
+            <Button title="Simulate Trip" onPress={() => router.push('/fleet_manager/trip' as any)} variant="primary" />
           </View>
         </Card>
       )}
