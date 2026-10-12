@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text, Pressable } from 'react-native';
+import { router } from 'expo-router';
 // We use useSafeAreaInsets so the navbar respects the phone's notch/status bar dynamically
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/tokens';
@@ -46,7 +47,12 @@ export function TopNavBar() {
 
       {/* Right side: Actions & Profile */}
       <View style={styles.actionsContainer}>
-        <Pressable style={styles.iconButton} accessibilityRole="button" accessibilityLabel="Notifications">
+        <Pressable
+          style={styles.iconButton}
+          onPress={() => router.push('/fleet_manager/notifications')}
+          accessibilityRole="button"
+          accessibilityLabel="Notifications"
+        >
           <Bell size={24} color={colors.text} />
           {/* Unread badge indicator */}
           <View style={styles.badge} />
@@ -54,7 +60,7 @@ export function TopNavBar() {
 
         <Pressable 
           style={styles.profileContainer} 
-          onPress={() => console.log('Open profile menu')}
+          onPress={() => router.push('/fleet_manager/profile')}
           accessibilityRole="button"
           accessibilityLabel="Profile Menu"
         >

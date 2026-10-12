@@ -40,7 +40,18 @@ const HIDDEN_SCREENS = [
   'signoff',
   'trip',
   'add-rider',
+  'assignment/[id]',
+  'rider/[id]',
 ] as const;
+
+/** Screens that provide their own custom header and back button */
+const CUSTOM_HEADER_SCREENS = new Set([
+  'assignment/[id]',
+  'rider/[id]',
+  'booking',
+  'add-rider',
+  'riders',
+]);
 
 /**
  * MainLayout
@@ -66,7 +77,14 @@ export default function MainLayout() {
 
       {/* Dynamically map over the hidden screens and set their href to null so they are hidden from the nav bar */}
       {HIDDEN_SCREENS.map((name) => (
-        <Tabs.Screen key={name} name={name} options={{ href: null }} />
+        <Tabs.Screen
+          key={name}
+          name={name}
+          options={{
+            href: null,
+            headerShown: !CUSTOM_HEADER_SCREENS.has(name),
+          }}
+        />
       ))}
     </Tabs>
   );

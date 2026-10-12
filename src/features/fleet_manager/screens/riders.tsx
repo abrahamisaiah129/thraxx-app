@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { CaretLeft, MagnifyingGlass, Phone, Plus, Star } from 'phosphor-react-native';
+import { Alert, FlatList, Linking, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { CaretLeft, CaretRight, MagnifyingGlass, Phone, Plus, Star } from 'phosphor-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fleetManagerData } from '@/data/fleetManagerData';
 import { colors, spacing } from '@/theme/tokens';
@@ -98,7 +98,12 @@ export default function RidersScreen() {
           const status = item.status as RiderStatus;
           const tone = statusStyles[status];
           return (
-            <View style={styles.card}>
+            <Pressable
+              onPress={() => router.push(`/fleet_manager/rider/${item.id}` as any)}
+              style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+              accessibilityRole="button"
+              accessibilityLabel={`Rider ${item.name}`}
+            >
               <View style={styles.cardHeader}>
                 <View style={styles.avatar}>
                   <Text style={styles.avatarText}>{item.name.charAt(0)}</Text>
@@ -110,6 +115,7 @@ export default function RidersScreen() {
                 <View style={[styles.statusBadge, { backgroundColor: tone.background }]}>
                   <Text style={[styles.statusText, { color: tone.text }]}>{statusCopy[status]}</Text>
                 </View>
+                <CaretRight size={18} color={colors.textSecondary} style={{ marginLeft: 4 }} />
               </View>
 
               <View style={styles.statsRow}>
@@ -122,10 +128,20 @@ export default function RidersScreen() {
               </View>
 
               <View style={styles.footer}>
-                <Phone size={16} color={colors.textSecondary} />
-                <Text style={styles.footerText}>{item.phone}</Text>
+                <Pressable
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    Linking.openURL(`tel:${item.phone}`).catch(() => {
+                      Alert.alert('Phone', item.phone);
+                    });
+                  }}
+                  style={styles.phoneAction}
+                >
+                  <Phone size={16} color={colors.primary} weight="fill" />
+                  <Text style={[styles.footerText, { color: colors.primary, fontWeight: '600' }]}>{item.phone}</Text>
+                </Pressable>
               </View>
-            </View>
+            </Pressable>
           );
         }}
         contentContainerStyle={styles.listContent}
@@ -186,6 +202,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     padding: spacing.md,
+  },
+  cardPressed: {
+    opacity: 0.92,
+    transform: [{ scale: 0.995 }],
+  },
+  phoneAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   cardHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
   avatar: {

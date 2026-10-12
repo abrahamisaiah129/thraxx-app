@@ -25,9 +25,20 @@ export const AssignmentList = ({ assignments, onAssignmentPress, onRefresh, refr
     <FlatList
       data={assignments}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <AssignmentCard assignment={item} onPress={onAssignmentPress} />
-      )}
+      renderItem={({ item }) => {
+        const cardData = 'assignmentId' in (item as any)
+          ? (item as any)
+          : {
+              assignmentId: item.id,
+              waybillTrackingNumber: item.id,
+              customerName: item.passengerName,
+              pickupAddress: item.pickupLocation,
+              deliveryAddress: item.dropoffLocation,
+              deliveryStatus: item.status,
+              openFlagCount: 0,
+            };
+        return <AssignmentCard assignment={cardData} />;
+      }}
       contentContainerStyle={styles.listContainer}
       onRefresh={onRefresh}
       refreshing={refreshing}

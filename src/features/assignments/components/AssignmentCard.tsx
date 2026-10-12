@@ -23,7 +23,7 @@ export const AssignmentCard = memo(function AssignmentCard({ assignment: a }: Pr
   return (
     <Link
       href={{
-        pathname: '/fleet_manager/assignments',
+        pathname: '/fleet_manager/assignment/[id]' as any,
         params: { id: a.assignmentId },
       }}
       asChild

@@ -19,7 +19,7 @@ export default function NotificationsScreen() {
   function openNotification(notification: (typeof fleetManagerData.notifications)[number]) {
     setReadIds((current) => new Set(current).add(notification.id));
     if (notification.relatedAssignmentId) {
-      router.push(`/fleet_manager/assignments?assignmentId=${notification.relatedAssignmentId}`);
+      router.push(`/fleet_manager/assignment/${notification.relatedAssignmentId}` as any);
     }
   }
   

@@ -1,7 +1,9 @@
 import { useAuthStore } from '@/store/useAuthStore';
 import { Stack } from 'expo-router';
+import { useDeepLinking } from '@/hooks/useDeepLinking';
 
 export default function RootLayout() {
+  useDeepLinking();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const role = useAuthStore((s) => s.user?.role);
 

@@ -1,35 +1,49 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, TextInput, View, Alert } from 'react-native';
+import { router } from 'expo-router';
 import { colors } from '@/theme/tokens';
 import { Copy } from 'phosphor-react-native/src/icons/Copy';
 import { Link } from 'phosphor-react-native/src/icons/Link';
 import { CheckCircle } from 'phosphor-react-native/src/icons/CheckCircle';
 import { Sparkle } from 'phosphor-react-native/src/icons/Sparkle';
+import { getBookingDeepLink } from '@/services/deepLinking';
 
 export function QuickActions() {
   const [copied, setCopied] = useState(false);
+  const [query, setQuery] = useState('');
 
   const handleCopy = () => {
+    const bookingLink = getBookingDeepLink();
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    Alert.alert('Booking Deep Link Generated', bookingLink);
+  };
+
+  const handleAiSubmit = () => {
+    router.push('/fleet_manager/ai');
   };
 
   return (
     <View style={styles.container}>
       {/* AI Assistant Search Bar */}
-      <View style={styles.aiBar}>
+      <Pressable onPress={handleAiSubmit} style={styles.aiBar}>
         <Sparkle color={colors.primary} size={20} weight="fill" />
         <TextInput
           placeholder="Ask Traxx AI (e.g., 'Why is Rider 2 delayed?')"
           placeholderTextColor="#9ca3af"
+          value={query}
+          onChangeText={setQuery}
+          onSubmitEditing={handleAiSubmit}
           style={styles.input}
         />
-      </View>
+      </Pressable>
 
       {/* Quick Copy Booking Link Pill */}
       <Pressable 
         style={[styles.copyPill, copied && styles.copyPillSuccess]} 
         onPress={handleCopy}
+        accessibilityRole="button"
+        accessibilityLabel="Copy booking deep link"
       >
         {copied ? (
           <CheckCircle color="#16a34a" size={16} weight="fill" />
@@ -37,7 +51,7 @@ export function QuickActions() {
           <Link color={colors.textSecondary} size={16} weight="bold" />
         )}
         <Text style={[styles.copyText, copied && styles.copyTextSuccess]}>
-          {copied ? 'Link Copied!' : 'Copy Booking Page Link'}
+          {copied ? 'Link Generated & Copied!' : 'Copy Booking Deep Link'}
         </Text>
       </Pressable>
     </View>

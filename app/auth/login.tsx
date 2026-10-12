@@ -1,58 +1,38 @@
-// Import core components from React Native for UI layout and text input
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-// Import useState to manage form field state
 import { useState } from 'react';
-// Import useRouter for programmatic navigation between screens
 import { useRouter } from 'expo-router';
-// Import our custom, reusable UI button component
 import { Button } from '@/components/ui/Button';
-// Import centralized theme tokens for consistent styling
 import { useAuthStore, type UserRole } from '@/store/useAuthStore';
 import { colors, spacing } from '@/theme/tokens';
+import { ShieldCheck, Motorcycle, Buildings } from 'phosphor-react-native';
 
-/**
- * LoginScreen Component
- *
- * This screen handles user authentication. Currently, it is set up to completely
- * bypass real authentication for rapid development and testing.
- */
 export default function LoginScreen() {
-  // State to track the user's email input
   const [email, setEmail] = useState('');
-  // State to track the user's password input
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<Exclude<UserRole, null>>('fleet_manager');
 
-  // Router instance to navigate across the app
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
   const isLoading = useAuthStore((state) => state.isLoading);
 
-  /**
-   * handleLogin
-   *
-   * A placeholder function that fires when the user taps "Login".
-   * It skips backend validation and routes to the selected role workspace.
-   */
-  const handleLogin = async () => {
-    // router.replace completely overwrites the history stack so the user cannot press "back" to return to the login screen
-    await login(email || 'demo@traxx.ng', role);
+  const handleLogin = async (selectedRole?: Exclude<UserRole, null>) => {
+    const targetRole = selectedRole || role;
+    await login(email || `demo_${targetRole}@traxx.ng`, targetRole);
     router.replace(
-      role === 'admin'
+      targetRole === 'admin'
         ? '/admin'
-        : role === 'fleet_manager'
+        : targetRole === 'fleet_manager'
           ? '/fleet_manager'
           : '/rider',
     );
   };
 
   return (
-    // Main wrapper container that centers the login form on the screen
     <View style={styles.container}>
-      {/* Header text introducing the app */}
-      <Text style={styles.title}>Traxx Admin</Text>
-      <Text style={styles.subtitle}>Sign in to your account</Text>
+      <Text style={styles.title}>Traxx Logistics</Text>
+      <Text style={styles.subtitle}>Select a role to preview any workspace</Text>
 
+      {/* Role Selector Tabs */}
       <View style={styles.roleSelector}>
         {(
           [
@@ -71,58 +51,76 @@ export default function LoginScreen() {
         ))}
       </View>
 
-      {/* 
-        Email Input Field
-        - keyboardType="email-address" optimizes the mobile keyboard layout for typing emails (@ symbol)
-        - autoCapitalize="none" prevents the OS from capitalizing the first letter
-      */}
       <TextInput
         style={styles.input}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
-        placeholder="Email"
+        placeholder={`Email (or tap direct login below)`}
+        placeholderTextColor={colors.textSecondary}
         autoCapitalize="none"
       />
 
-      {/* 
-        Password Input Field
-        - secureTextEntry replaces typed characters with dots/asterisks for security
-      */}
       <TextInput
         style={styles.input}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
         placeholder="Password"
+        placeholderTextColor={colors.textSecondary}
       />
 
-      {/* 
-        Custom Button component wrapping a React Native TouchableOpacity.
-        Executes handleLogin to bypass auth when pressed.
-      */}
-      <Button title="Login" onPress={handleLogin} isLoading={isLoading} />
+      <Button title={`Sign in as ${role === 'fleet_manager' ? 'Fleet Manager' : role === 'rider' ? 'Rider' : 'Admin'}`} onPress={() => handleLogin()} isLoading={isLoading} />
+
+      {/* 1-Tap Quick Role Demos */}
+      <View style={styles.quickAccessSection}>
+        <Text style={styles.quickAccessTitle}>ONE-TAP QUICK ACCESS</Text>
+        <View style={styles.quickButtons}>
+          <Pressable
+            onPress={() => handleLogin('fleet_manager')}
+            style={styles.quickBtn}
+          >
+            <Buildings size={18} color={colors.primary} weight="bold" />
+            <Text style={styles.quickBtnText}>Fleet Manager</Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => handleLogin('rider')}
+            style={styles.quickBtn}
+          >
+            <Motorcycle size={18} color="#16a34a" weight="bold" />
+            <Text style={styles.quickBtnText}>Rider / Driver</Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => handleLogin('admin')}
+            style={styles.quickBtn}
+          >
+            <ShieldCheck size={18} color="#d97706" weight="bold" />
+            <Text style={styles.quickBtnText}>Super Admin</Text>
+          </Pressable>
+        </View>
+      </View>
     </View>
   );
 }
 
-// Global styles for the LoginScreen
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Take up the entire screen height
-    justifyContent: 'center', // Center content vertically
-    padding: spacing.xl, // Extra large padding around the edges
-    backgroundColor: '#f9fafb', // Standard app background color
+    flex: 1,
+    justifyContent: 'center',
+    padding: spacing.xl,
+    backgroundColor: '#f9fafb',
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: colors.primary, // Use the primary brand blue
+    color: colors.primary,
     textAlign: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: colors.textSecondary,
     textAlign: 'center',
     marginBottom: spacing.xl,
@@ -148,17 +146,55 @@ const styles = StyleSheet.create({
   roleText: {
     color: colors.textSecondary,
     fontWeight: '600',
+    fontSize: 13,
   },
   roleTextActive: {
     color: colors.primary,
+    fontWeight: '700',
   },
   input: {
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 8,
     padding: spacing.md,
-    fontSize: 16,
+    fontSize: 15,
     marginBottom: spacing.md,
     backgroundColor: '#ffffff',
+    color: colors.text,
+  },
+  quickAccessSection: {
+    marginTop: spacing.xl,
+    paddingTop: spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+    alignItems: 'center',
+    gap: 12,
+  },
+  quickAccessTitle: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: colors.textSecondary,
+    letterSpacing: 0.8,
+  },
+  quickButtons: {
+    flexDirection: 'row',
+    gap: 8,
+    width: '100%',
+  },
+  quickBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+    gap: 6,
+  },
+  quickBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.text,
   },
 });

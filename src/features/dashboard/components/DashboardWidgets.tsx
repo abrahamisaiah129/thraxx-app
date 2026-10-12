@@ -1,6 +1,7 @@
 import { CaretRight } from 'phosphor-react-native/src/icons/CaretRight';
 import { WarningCircle } from 'phosphor-react-native/src/icons/WarningCircle';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import { fleetManagerData } from '@/data/fleetManagerData';
 import { colors } from '@/theme/tokens';
 
@@ -20,7 +21,7 @@ export function DashboardWidgets() {
           <Text style={styles.alertText}>
             {flaggedEventsCount} Actionable Alerts: Route deviations detected.
           </Text>
-          <Pressable>
+          <Pressable onPress={() => router.push('/fleet_manager/assignments')}>
             <Text style={styles.alertLink}>View</Text>
           </Pressable>
         </View>
@@ -35,7 +36,12 @@ export function DashboardWidgets() {
             <Text style={styles.liveText}>Live</Text>
           </View>
         </View>
-        <Pressable style={styles.mapPlaceholder}>
+        <Pressable
+          onPress={() => router.push('/fleet_manager/map')}
+          style={styles.mapPlaceholder}
+          accessibilityRole="button"
+          accessibilityLabel="Open live fleet map"
+        >
           <Text style={styles.mapText}>Tap to open interactive map</Text>
         </Pressable>
       </View>
@@ -44,7 +50,12 @@ export function DashboardWidgets() {
       <View style={styles.widgetCard}>
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>Today's Assignments</Text>
-          <Pressable style={styles.viewAllBtn}>
+          <Pressable
+            onPress={() => router.push('/fleet_manager/assignments')}
+            style={styles.viewAllBtn}
+            accessibilityRole="button"
+            accessibilityLabel="View all assignments"
+          >
             <Text style={styles.viewAllText}>View all</Text>
             <CaretRight size={14} color={colors.primary} />
           </Pressable>
@@ -52,12 +63,15 @@ export function DashboardWidgets() {
 
         <View style={styles.assignmentList}>
           {top3Assignments.map((task: any, index: number) => (
-            <View
-              key={index}
+            <Pressable
+              key={task.assignmentId || index}
+              onPress={() => router.push(`/fleet_manager/assignment/${task.assignmentId}` as any)}
               style={[
                 styles.taskRow,
                 index !== top3Assignments.length - 1 && styles.taskRowDivider,
               ]}
+              accessibilityRole="button"
+              accessibilityLabel={`View assignment ${task.waybillTrackingNumber}`}
             >
               <View style={styles.taskInfo}>
                 <Text style={styles.taskRider}>{task.assignedRiderId}</Text>
@@ -83,7 +97,7 @@ export function DashboardWidgets() {
                   {task.deliveryStatus === 'in_progress' ? 'In Transit' : task.deliveryStatus}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           ))}
         </View>
       </View>

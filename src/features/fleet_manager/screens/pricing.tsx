@@ -8,7 +8,7 @@ import { colors, spacing } from '@/theme/tokens';
  */
 export default function PricingPage() {
   const insets = useSafeAreaInsets();
-  const currentPlan = fleetManagerData.tenantCompany.subscription;
+  const currentPlan = fleetManagerData.Company.subscription;
 
   return (
     <ScrollView

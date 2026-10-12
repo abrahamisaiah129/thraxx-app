@@ -10,10 +10,10 @@ export default function SettingsScreen() {
   
   // Here we use the mock data to populate user info
   const user = {
-    fullName: fleetManagerData.tenantCompany.legalName,
-    securityRole: fleetManagerData.tenantCompany.role,
-    emailAddress: fleetManagerData.tenantCompany.emailAddress,
-    phoneNumber: fleetManagerData.tenantCompany.phoneNumber,
+    fullName: fleetManagerData.Company.legalName,
+    securityRole: fleetManagerData.Company.role,
+    emailAddress: fleetManagerData.Company.emailAddress,
+    phoneNumber: fleetManagerData.Company.phoneNumber,
   };
 
   return (
